@@ -30,4 +30,4 @@ const getUsersById = async (request, response) => {
 module.exports = {
     getUsers,
     getUsersById
-}
+};
