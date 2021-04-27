@@ -1,25 +1,31 @@
 const pool = require('../config/database');
-
+const {
+    getUser,
+    g1
+} = require('../services/users');
 /******** Get Users By ID */
-const getUsers = (request, response) => {
-    pool.query('SELECT * FROM users ORDER BY user_id ASC', (error, results) => {
-        if (error) {
-            throw error
-        }
-        response.status(200).json(results.rows);
-    })
-}
+const getUsers = async (request, response) => {
+    try{
+        const user = await getUser();
+        return response.status(200).json(user);
+    }catch (e) {
+        return response.status(500).json({
+            message: e.message
+        });
+    }
+};
 
 /******** Get Application By ID */
-const getUsersById = (request, response) => {
+const getUsersById = async (request, response) => {
     const id = parseInt(request.params.id)
-    pool.query('SELECT * FROM users WHERE user_id = $1', [id], (error, results) => {
-      if (error) {
-        throw error
-      }
-      response.status(200).json(results.rows)
-    })
-  }
+    const res = await g1(id)
+    if(res.err){
+        return response.status(500).json({
+            message: res.err
+        });
+    }
+    return response.status(200).json(res.data);
+};
 
 module.exports = {
     getUsers,
