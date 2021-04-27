@@ -1,14 +1,22 @@
 const pool = require('../config/database');
 
+const log = async () => {
+
+};
+
 /******* Get All Position */
-const getPos = (request, response) => {
-    pool.query('SELECT * FROM position ORDER BY position_id ASC', (error, results) => {
+const getPos = async (request, response) => {
+    /*pool.query('SELECT * FROM position ORDER BY position_id ASC', (error, results) => {
         if (error) {
             throw error
         }
         response.status(200).json(results.rows)
-    })
-}
+    })*/
+
+    const results = await pool.query('SELECT * FROM position ORDER BY position_id ASC');
+    log().then();
+    response.status(200).json(results.rows)
+};
 
 /******* Get Position By ID */
 const getPosById = (request, response) => {
